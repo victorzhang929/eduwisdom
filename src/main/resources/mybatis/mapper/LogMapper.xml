@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.victorzhang.eduwisdom.mapper.LogMapper">
+
+    <insert id="save" parameterType="com.victorzhang.eduwisdom.domain.Log">
+        INSERT INTO log (id, log_type, log_content, user_id, user_date, user_ip)
+        VALUES (#{id},#{logType},#{logContent},#{userId},#{userDate},#{userIp})
+    </insert>
+
+    <select id="listLogType" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT DISTINCT(log_type) FROM log
+        <where>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="count" resultType="int" parameterType="java.util.Map">
+        SELECT COUNT(*) FROM log
+        LEFT JOIN user
+        ON log.user_id = user.id
+        <where>
+            <if test="logType != null and logType != ''">
+                AND log.log_type = #{logType}
+            </if>
+            <if test="userId != null and userId != ''">
+                AND log.user_id = #{userId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND log.user_date >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND #{endDate} >= log.user_date
+            </if>
+        </where>
+    </select>
+
+    <select id="listPaging" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(log.user_date,'%Y-%m-%d %H:%i:%s') AS user_date,log.log_type,log.log_content,log.user_ip,user.username,user.realname
+        FROM log
+        LEFT JOIN user ON
+        log.user_id = user.id
+        <where>
+            <if test="logType != null and logType != ''">
+                AND log.log_type = #{logType}
+            </if>
+            <if test="userId != null and userId != ''">
+                AND log.user_id = #{userId}
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND log.user_date >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND #{endDate} >= log.user_date
+            </if>
+        </where>
+        ORDER BY log.user_date DESC LIMIT ${begin},${pageSize}
+    </select>
+</mapper>

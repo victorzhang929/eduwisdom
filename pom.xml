@@ -263,6 +263,7 @@
         </configuration>
       </plugin>
     </plugins>
+
     <finalName>eduwisdom</finalName>
   </build>
 </project>

@@ -75,7 +75,7 @@
   </session-config>
   <filter>
     <filter-name>UserFilter</filter-name>
-    <filter-class>com.victorzhang.eduwisdom.util.UserFilter</filter-class>
+    <filter-class>com.vz.eduwisdom.util.UserFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>UserFilter</filter-name>
